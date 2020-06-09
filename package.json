@@ -1,0 +1,33 @@
+{
+  "name": "7-segment-timer",
+  "version": "0.0.1-alpha.1",
+  "description": "",
+  "main": "dist/index.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/SteffenKn/7-Segment-Display-Controller.git"
+  },
+  "scripts": {
+    "build": "tsc"
+  },
+  "keywords": [
+    "pi",
+    "7-segment",
+    "display",
+    "tier"
+  ],
+  "author": "Steffen Knaup",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/SteffenKn/7-Segment-Timer/issues"
+  },
+  "homepage": "https://github.com/SteffenKn/7-Segment-Timer#readme",
+  "dependencies": {
+    "7-segment-display-controller": "0.0.1-alpha.12"
+  },
+  "devDependencies": {
+    "@types/node": "14.0.5",
+    "tslint": "6.1.2",
+    "typescript": "3.9.3"
+  }
+}
