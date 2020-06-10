@@ -28,8 +28,8 @@ export default class NumberDisplay {
 
     const colorToUse: RgbColor = color ? color : this.color;
 
-    this.firstDigitDisplay.displayNumber(Math.floor(numberToDisplay / 10) % 10, colorToUse);
-    this.secondDigitDisplay.displayNumber(numberToDisplay % 10, colorToUse);
+    this.firstDigitDisplay.displayNumber(numberToDisplay % 10, colorToUse);
+    this.secondDigitDisplay.displayNumber(Math.floor(numberToDisplay / 10) % 10, colorToUse);
   }
 
   public clear(): void {
