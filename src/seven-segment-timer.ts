@@ -60,7 +60,7 @@ export class SevenSegmentTimer {
       this.firstNumberDisplay.showNumber(hours);
       this.secondNumberDisplay.showNumber(minutes);
       this.ledController.render();
-    });
+    }, 1000 * 60);
   }
 
   public stopDisplayingTime(): void {
