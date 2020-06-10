@@ -45,7 +45,7 @@ export class SevenSegmentTimer {
     this.secondNumberDisplay.setColor(color);
     this.dividerDisplay.startBlinking(color, 2000);
 
-    const showTimeInterval: number = setInterval((): void => {
+    const showTimeInterval: NodeJS.Timeout = setInterval((): void => {
       if (!this.showTime) {
         clearTimeout(showTimeInterval);
 
