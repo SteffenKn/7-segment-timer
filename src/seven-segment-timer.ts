@@ -45,6 +45,8 @@ export class SevenSegmentTimer {
     this.secondNumberDisplay.setColor(color);
     this.dividerDisplay.startBlinking(color, 2000);
 
+    this.updateTime();
+
     const showTimeInterval: NodeJS.Timeout = setInterval((): void => {
       if (!this.showTime) {
         clearTimeout(showTimeInterval);
@@ -52,14 +54,7 @@ export class SevenSegmentTimer {
         return;
       }
 
-      const now: Date = new Date();
-
-      const hours: number = now.getHours();
-      const minutes: number = now.getMinutes();
-
-      this.firstNumberDisplay.showNumber(hours);
-      this.secondNumberDisplay.showNumber(minutes);
-      this.ledController.render();
+      this.updateTime();
     }, 1000 * 60);
   }
 
@@ -78,5 +73,16 @@ export class SevenSegmentTimer {
 
   public stopTimer(): void {
     throw new Error('Not yet implemented.');
+  }
+
+  private updateTime(): void {
+    const now: Date = new Date();
+
+    const hours: number = now.getHours();
+    const minutes: number = now.getMinutes();
+
+    this.firstNumberDisplay.showNumber(hours);
+    this.secondNumberDisplay.showNumber(minutes);
+    this.ledController.render();
   }
 }
