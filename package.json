@@ -8,7 +8,8 @@
     "url": "git+https://github.com/SteffenKn/7-Segment-Display-Controller.git"
   },
   "scripts": {
-    "build": "tsc"
+    "build": "tsc",
+    "start": "node dist/index.js"
   },
   "keywords": [
     "pi",
@@ -23,9 +24,12 @@
   },
   "homepage": "https://github.com/SteffenKn/7-Segment-Timer#readme",
   "dependencies": {
-    "7-segment-display-controller": "0.0.1-alpha.12"
+    "7-segment-display-controller": "0.0.1-alpha.14",
+    "body-parser": "^1.19.0",
+    "express": "^4.17.1"
   },
   "devDependencies": {
+    "@types/express": "^4.17.6",
     "@types/node": "14.0.5",
     "tslint": "6.1.2",
     "typescript": "3.9.3"

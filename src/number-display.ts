@@ -4,16 +4,18 @@ import {
   RgbColor,
 } from '7-segment-display-controller';
 
-export default class NumberDisplay {
+export class NumberDisplay {
   private ledController: LedController;
 
   private firstDigitDisplay: DigitDisplay;
   private secondDigitDisplay: DigitDisplay;
 
-  private color: RgbColor;
+  private color: RgbColor | Array<RgbColor>;
+  private displayLeadingZero: boolean;
 
-  constructor(ledController: LedController, ledStartIndex: number, segmentsPerDigit: number, ledsPerSegment: number) {
+  constructor(ledController: LedController, ledStartIndex: number, segmentsPerDigit: number, ledsPerSegment: number, displayLeadingZero: boolean) {
     this.ledController = ledController;
+    this.displayLeadingZero = displayLeadingZero;
 
     const ledsPerDigit: number = segmentsPerDigit * ledsPerSegment;
 
@@ -24,20 +26,46 @@ export default class NumberDisplay {
     ledIndex += ledsPerDigit;
   }
 
-  public showNumber(numberToDisplay: number, color?: RgbColor): void {
-
-    const colorToUse: RgbColor = color ? color : this.color;
-
-    this.firstDigitDisplay.displayNumber(numberToDisplay % 10, colorToUse);
-    this.secondDigitDisplay.displayNumber(Math.floor(numberToDisplay / 10) % 10, colorToUse);
-  }
-
-  public clear(): void {
-    this.firstDigitDisplay.clear();
-    this.secondDigitDisplay.clear();
-  }
-
-  public setColor(color: RgbColor): void {
+  public setColors(color: RgbColor | Array<RgbColor>): void {
     this.color = color;
+
+    if (Array.isArray(color)) {
+      this.firstDigitDisplay.setMultipleColors(color);
+      this.secondDigitDisplay.setMultipleColors(color);
+    } else {
+      this.firstDigitDisplay.setColor(color);
+      this.secondDigitDisplay.setColor(color);
+    }
+  }
+
+  public showNumber(numberToDisplay: number, color?: Array<RgbColor> | RgbColor): void {
+
+    this.color = color ? color : this.color;
+
+    const firstDigitNumber: number = numberToDisplay % 10;
+    const secondDigitNumber: number = Math.floor(numberToDisplay / 10) % 10;
+
+    this.firstDigitDisplay.displayNumber(firstDigitNumber, this.color);
+
+    if (secondDigitNumber === 0 && !this.displayLeadingZero) {
+      this.secondDigitDisplay.off();
+    } else {
+      this.secondDigitDisplay.displayNumber(secondDigitNumber, this.color);
+    }
+  }
+
+  public startBlinking(intervalInMs?: number, blinkCallback?: Function): void {
+    this.firstDigitDisplay.startBlinking(intervalInMs);
+    this.secondDigitDisplay.startBlinking(intervalInMs, blinkCallback);
+  }
+
+  public stop(): void {
+    this.firstDigitDisplay.stopBlinking();
+    this.secondDigitDisplay.stopBlinking();
+  }
+
+  public off(): void {
+    this.firstDigitDisplay.off();
+    this.secondDigitDisplay.off();
   }
 }

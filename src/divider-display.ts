@@ -4,9 +4,9 @@ import {
   RgbColor,
 } from '7-segment-display-controller';
 
-import {getRandomRgbColor} from './utils';
+import Utils from './utils';
 
-export default class DividerDisplay {
+export class DividerDisplay {
   private ledController: LedController;
 
   private firstDotDisplay: DotDisplay;
@@ -25,19 +25,19 @@ export default class DividerDisplay {
   }
 
   public on(color?: RgbColor): void {
-    const colorToUse: RgbColor = color ? color : this.color;
+    this.color = color ? color : this.color;
 
-    this.firstDotDisplay.setColor(colorToUse);
-    this.secondDotDisplay.setColor(colorToUse);
+    this.firstDotDisplay.setColor(this.color);
+    this.secondDotDisplay.setColor(this.color);
   }
 
   public off(): void {
-    this.firstDotDisplay.clear();
-    this.secondDotDisplay.clear();
+    this.firstDotDisplay.off();
+    this.secondDotDisplay.off();
   }
 
-  public startBlinking(color?: RgbColor, intervalInMs?: number, blinkCallback?: Function): void {
-    const dotColor: RgbColor = color ? color : getRandomRgbColor();
+  public startBlinking(intervalInMs?: number, color?: RgbColor, blinkCallback?: Function): void {
+    const dotColor: RgbColor = color ? color : Utils.getRandomRgbColor();
 
     this.firstDotDisplay.setColor(dotColor);
     this.secondDotDisplay.setColor(dotColor);
