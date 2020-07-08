@@ -48,9 +48,9 @@ export class SevenSegmentTimer {
 
   }
 
-  public startTimer(hours: number, minutes: number, seconds: number, color: RgbColor): void {
+  public async startTimer(hours: number, minutes: number, seconds: number, color: RgbColor): Promise<void> {
     if (this.showCurrentTime) {
-      this.stopDisplayingCurrentTime();
+      await this.stopDisplayingCurrentTime();
     } else if (this.showTimer) {
       this.cancelTimer();
     }
@@ -131,6 +131,7 @@ export class SevenSegmentTimer {
       this.secondNumberDisplay.setColors(color);
       this.dividerDisplay.setColor(dotColor);
     }
+
     this.dividerDisplay.on();
 
     this.showCurrentTime = true;
