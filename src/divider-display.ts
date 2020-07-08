@@ -14,6 +14,9 @@ export class DividerDisplay {
 
   private color: RgbColor;
 
+  private isBlinking: boolean = false;
+  private blinkInterval: NodeJS.Timeout;
+
   constructor(ledController: LedController, ledStartIndex: number, ledsPerDot: number) {
     this.ledController = ledController;
 
@@ -42,13 +45,32 @@ export class DividerDisplay {
     this.firstDotDisplay.setColor(dotColor);
     this.secondDotDisplay.setColor(dotColor);
 
-    this.firstDotDisplay.startBlinking(intervalInMs);
-    this.secondDotDisplay.startBlinking(intervalInMs, blinkCallback);
+    const interval: number = intervalInMs ? intervalInMs : 500;
+    this.isBlinking = true;
+
+    let on: boolean = true;
+    this.blinkInterval = setInterval((): void => {
+      if (!this.isBlinking) {
+        return;
+      }
+
+      if (on) {
+        this.firstDotDisplay.on();
+        this.secondDotDisplay.on();
+      } else {
+        this.firstDotDisplay.off();
+        this.secondDotDisplay.off();
+      }
+      blinkCallback();
+
+      on = !on;
+    }, interval);
   }
 
   public stopBlinking(): void {
-    this.firstDotDisplay.stopBlinking();
-    this.secondDotDisplay.stopBlinking();
+    this.isBlinking = false;
+
+    clearInterval(this.blinkInterval);
   }
 
   public setColor(color: RgbColor): void {
