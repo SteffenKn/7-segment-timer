@@ -178,12 +178,16 @@ export class SevenSegmentTimer {
     this.firstNumberDisplay.setColors(color);
     this.dividerDisplay.setColor(color);
     this.secondNumberDisplay.setColors(color);
+
+    this.ledController.render();
   }
 
   public setMultipleColors(colors: Array<RgbColor>): void {
     this.firstNumberDisplay.setColors(colors);
     this.dividerDisplay.setColor(colors[0]);
     this.secondNumberDisplay.setColors(colors);
+
+    this.ledController.render();
   }
 
   public async showBootAnimation(): Promise<void> {
