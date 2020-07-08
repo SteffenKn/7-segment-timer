@@ -78,5 +78,8 @@ export class DividerDisplay {
 
   public setColor(color: RgbColor): void {
     this.color = color;
+
+    this.firstDotDisplay.setColor(color);
+    this.secondDotDisplay.setColor(color);
   }
 }
