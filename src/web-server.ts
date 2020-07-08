@@ -103,7 +103,7 @@ export class Webserver {
         const colors: Array<RgbColor> = request.body.colors;
         console.log(`7-Segment-Timer: change colors to ${JSON.stringify(colors)}`);
 
-        this.sevenSegmentTimer.setColor(request.body.colors);
+        this.sevenSegmentTimer.setMultipleColors(request.body.colors);
 
         response.status(200).send('success');
       } catch (error) {
