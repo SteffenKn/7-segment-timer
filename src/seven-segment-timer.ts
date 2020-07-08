@@ -144,7 +144,7 @@ export class SevenSegmentTimer {
       }
 
       this.updateCurrentTime();
-    }, 1000 * 60);
+    }, 3000);
   }
 
   public stopDisplayingCurrentTime(): Promise<void> {
