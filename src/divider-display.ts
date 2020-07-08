@@ -32,6 +32,9 @@ export class DividerDisplay {
 
     this.firstDotDisplay.setColor(this.color);
     this.secondDotDisplay.setColor(this.color);
+
+    this.firstDotDisplay.on();
+    this.secondDotDisplay.on();
   }
 
   public off(): void {
