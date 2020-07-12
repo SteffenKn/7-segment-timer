@@ -59,9 +59,12 @@ export class SevenSegmentTimer {
     }
 
     this.showTimer = true;
-    this.dividerDisplay.setColor(color);
-    this.firstNumberDisplay.setColors(color);
-    this.secondNumberDisplay.setColors(color);
+    if (color) {
+      this.dividerDisplay.setColor(color);
+      this.firstNumberDisplay.setColors(color);
+      this.secondNumberDisplay.setColors(color);
+    }
+
     this.dividerDisplay.startBlinking(2000, color, (): void => {
       this.ledController.render();
     });
