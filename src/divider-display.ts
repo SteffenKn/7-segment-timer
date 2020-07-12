@@ -12,7 +12,11 @@ export class DividerDisplay {
   private firstDotDisplay: DotDisplay;
   private secondDotDisplay: DotDisplay;
 
-  private color: RgbColor;
+  private color: RgbColor = {
+    red: 0,
+    green: 255,
+    blue: 0,
+  };
 
   private isBlinking: boolean = false;
   private blinkInterval: NodeJS.Timeout;

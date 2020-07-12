@@ -10,7 +10,11 @@ export class NumberDisplay {
   private firstDigitDisplay: DigitDisplay;
   private secondDigitDisplay: DigitDisplay;
 
-  private color: RgbColor | Array<RgbColor>;
+  private color: RgbColor | Array<RgbColor> = {
+    red: 0,
+    green: 255,
+    blue: 0,
+  };
   private displayLeadingZero: boolean;
 
   constructor(ledController: LedController, ledStartIndex: number, segmentsPerDigit: number, ledsPerSegment: number, displayLeadingZero: boolean) {
