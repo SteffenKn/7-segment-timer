@@ -19,7 +19,7 @@ export class Webserver {
   public async start(): Promise<void> {
     this.sevenSegmentTimer.off();
 
-    // await this.sevenSegmentTimer.showBootAnimation();
+    await this.sevenSegmentTimer.showBootAnimation();
 
     this.initializeWebserver();
     this.registerRoutes();

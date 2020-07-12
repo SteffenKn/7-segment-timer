@@ -9,10 +9,13 @@ const ledsPerDigit: number = ledsPerSegment * segmentsPerDigit;
 const digitsPerNumber: number = 2;
 const ledsPerNumber: number = ledsPerDigit * digitsPerNumber;
 const dotsPerDivider: number = 2;
+const dividers: number = 1;
 const ledsPerDot: number = 1;
 const ledsPerDivider: number = dotsPerDivider * ledsPerDot;
-const dots: number = 2;
+const dots: number = dividers * dotsPerDivider;
 const digits: number = 4;
+
+const amountOfLeds: number = ledsPerDigit * digits + ledsPerDot * dots;
 
 type UpdatedTimerTime = {
   updatedHours: number,
@@ -34,7 +37,7 @@ export class SevenSegmentTimer {
   private timerTimeout: NodeJS.Timeout;
 
   constructor() {
-    this.ledController = new LedController(ledsPerDigit * digits + ledsPerDot * dots);
+    this.ledController = new LedController(amountOfLeds);
 
     let ledIndex: number = 0;
     this.firstNumberDisplay = new NumberDisplay(this.ledController, ledIndex, segmentsPerDigit, ledsPerSegment, false);
@@ -191,36 +194,35 @@ export class SevenSegmentTimer {
   }
 
   public async showBootAnimation(): Promise<void> {
-    const black: RgbColor = {red: 0, green: 0, blue: 0};
-    this.firstNumberDisplay.showNumber(88, black);
-    this.secondNumberDisplay.showNumber(88, black);
-    this.dividerDisplay.on(black);
+    const colors: Array<number> = [0, 0, 0];
+    for (let rgbIndex: number = 0; rgbIndex < 4; rgbIndex++) {
+      for (let colorIndex: number = 0; colorIndex < 255 / 5; colorIndex++) {
+        if (rgbIndex < 3) {
+          if (rgbIndex > 0) {
+            colors[rgbIndex - 1] -= 5;
+          }
 
-    const colors: Array<RgbColor> = [
-      {red: 255, green: 0, blue: 0},
-      {red: 0, green: 255, blue: 0},
-      {red: 0, green: 0, blue: 255},
-      {red: 255, green: 255, blue: 0},
-      {red: 255, green: 0, blue: 255},
-      {red: 0, green: 255, blue: 255},
-    ];
+          colors[rgbIndex] += 5;
+        } else {
+          colors[0] += 5;
+          colors[2] -= 5;
+        }
 
-    for (const color of colors) {
-      this.firstNumberDisplay.setColors(color);
-      this.secondNumberDisplay.setColors(color);
-      this.dividerDisplay.setColor(color);
-      this.ledController.render();
+        const color: RgbColor = {
+          red: colors[0],
+          green: colors[1],
+          blue: colors[2],
+        };
 
-      await new Promise((resolve: Function): void => {setTimeout((): void => {resolve(); }, 1000); });
+        this.ledController.setLeds(0, amountOfLeds, color);
+        await this.ledController.render();
+        await this.wait(50);
+      }
     }
 
-    const white: RgbColor = {red: 255, green: 255, blue: 255};
-    this.firstNumberDisplay.setColors(white);
-    this.secondNumberDisplay.setColors(white);
-    this.dividerDisplay.setColor(white);
-    this.ledController.render();
-
-    await new Promise((resolve: Function): void => {setTimeout((): void => {resolve(); }, 3000); });
+    await this.wait(2000);
+    this.ledController.clearLeds(0, amountOfLeds);
+    await this.ledController.render();
   }
 
   private timerFinished(): void {
@@ -262,5 +264,13 @@ export class SevenSegmentTimer {
       updatedMinutes: minutes,
       updatedSeconds: seconds,
     };
+  }
+
+  private wait(ms: number): Promise<void> {
+    return new Promise((resolve: Function): void => {
+      setTimeout((): void => {
+        resolve();
+      }, ms);
+    });
   }
 }
