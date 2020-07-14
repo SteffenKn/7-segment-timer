@@ -231,6 +231,8 @@ export class SevenSegmentTimer {
   private timerFinished(): void {
     this.showTimer = false;
 
+    this.firstNumberDisplay.showNumber(0);
+    this.secondNumberDisplay.showNumber(0);
     this.firstNumberDisplay.startBlinking();
     this.dividerDisplay.startBlinking();
     this.secondNumberDisplay.startBlinking();
