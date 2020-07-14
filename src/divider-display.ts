@@ -4,8 +4,6 @@ import {
   RgbColor,
 } from '7-segment-display-controller';
 
-import Utils from './utils';
-
 export class DividerDisplay {
   private ledController: LedController;
 
@@ -47,7 +45,7 @@ export class DividerDisplay {
   }
 
   public startBlinking(intervalInMs?: number, color?: RgbColor, blinkCallback?: Function): void {
-    const dotColor: RgbColor = color ? color : Utils.getRandomRgbColor();
+    const dotColor: RgbColor = color ? color : this.color;
 
     this.firstDotDisplay.setColor(dotColor);
     this.secondDotDisplay.setColor(dotColor);

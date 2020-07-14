@@ -1,18 +1,4 @@
-import {RgbColor} from '7-segment-display-controller';
-
 export default class Utils {
-  public static getRandomRgbColor(): RgbColor {
-    const red: number = Math.floor(Math.random() * 256);
-    const green: number = Math.floor(Math.random() * 256);
-    const blue: number = Math.floor(Math.random() * 256);
-
-    return {
-      red: red,
-      green: green,
-      blue: blue,
-    };
-  }
-
   public static convertSecondsToMilliseconds(seconds: number): number {
     return seconds * 1000;
   }
