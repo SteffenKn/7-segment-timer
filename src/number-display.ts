@@ -68,6 +68,11 @@ export class NumberDisplay {
     this.secondDigitDisplay.stopBlinking();
   }
 
+  public on(): void {
+    this.firstDigitDisplay.on();
+    this.secondDigitDisplay.on();
+  }
+
   public off(): void {
     this.firstDigitDisplay.off();
     this.secondDigitDisplay.off();
