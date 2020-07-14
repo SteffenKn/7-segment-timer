@@ -83,49 +83,6 @@ export class SevenSegmentTimer {
     this.updateTimer(hours, minutes, seconds);
   }
 
-  private updateTimer(hours: number, minutes: number, seconds: number): void {
-    if (!this.showTimer) {
-      return;
-    }
-
-    const ms: number = hours > 0 ? 60 * 1000 : 1000;
-
-    if (hours === 0 && minutes === 0 && seconds === 0) {
-      this.timerFinished();
-      return;
-    }
-
-    if (hours === 1 && minutes === 0) {
-      minutes = 60;
-      hours = 0;
-    }
-
-    this.timerTimeout = setTimeout(async(): Promise<void> => {
-      // tslint:disable-next-line:prefer-const
-      let {updatedHours, updatedMinutes, updatedSeconds} = this.updateTimerTime(hours, minutes, seconds);
-
-      if (updatedHours > 0) {
-        this.firstNumberDisplay.showNumber(updatedHours);
-        this.secondNumberDisplay.showNumber(updatedMinutes);
-      } else {
-        this.firstNumberDisplay.showNumber(updatedMinutes);
-        this.secondNumberDisplay.showNumber(updatedSeconds);
-      }
-
-      await this.ledController.render();
-
-      if (hours > 0 && minutes === 0 && seconds === 0) {
-        updatedSeconds = 59;
-        updatedMinutes = 59;
-      }
-      if (minutes > 0 && seconds === 0) {
-        updatedSeconds = 59;
-      }
-
-      this.updateTimer(updatedHours, updatedMinutes, updatedSeconds);
-    }, ms);
-  }
-
   public async displayCurrentTime(color: Array<RgbColor> | RgbColor): Promise<void> {
     if (this.showCurrentTime) {
       await this.stopDisplayingCurrentTime();
@@ -229,6 +186,49 @@ export class SevenSegmentTimer {
     await this.wait(2000);
     this.ledController.clearLeds(0, amountOfLeds);
     await this.ledController.render();
+  }
+
+  private updateTimer(hours: number, minutes: number, seconds: number): void {
+    if (!this.showTimer) {
+      return;
+    }
+
+    const ms: number = hours > 0 ? 60 * 1000 : 1000;
+
+    if (hours === 0 && minutes === 0 && seconds === 0) {
+      this.timerFinished();
+      return;
+    }
+
+    if (hours === 1 && minutes === 0) {
+      minutes = 60;
+      hours = 0;
+    }
+
+    this.timerTimeout = setTimeout(async(): Promise<void> => {
+      // tslint:disable-next-line:prefer-const
+      let {updatedHours, updatedMinutes, updatedSeconds} = this.updateTimerTime(hours, minutes, seconds);
+
+      if (updatedHours > 0) {
+        this.firstNumberDisplay.showNumber(updatedHours);
+        this.secondNumberDisplay.showNumber(updatedMinutes);
+      } else {
+        this.firstNumberDisplay.showNumber(updatedMinutes);
+        this.secondNumberDisplay.showNumber(updatedSeconds);
+      }
+
+      await this.ledController.render();
+
+      if (hours > 0 && minutes === 0 && seconds === 0) {
+        updatedSeconds = 59;
+        updatedMinutes = 59;
+      }
+      if (minutes > 0 && seconds === 0) {
+        updatedSeconds = 59;
+      }
+
+      this.updateTimer(updatedHours, updatedMinutes, updatedSeconds);
+    }, ms);
   }
 
   private timerFinished(): void {
