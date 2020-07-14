@@ -68,7 +68,10 @@ export class DividerDisplay {
         this.firstDotDisplay.off();
         this.secondDotDisplay.off();
       }
-      blinkCallback();
+
+      if (blinkCallback) {
+        blinkCallback();
+      }
 
       on = !on;
     }, interval);
