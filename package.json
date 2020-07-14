@@ -24,7 +24,7 @@
   },
   "homepage": "https://github.com/SteffenKn/7-Segment-Timer#readme",
   "dependencies": {
-    "7-segment-display-controller": "0.0.1-alpha.16",
+    "7-segment-display-controller": "0.0.1-alpha.17",
     "body-parser": "^1.19.0",
     "express": "^4.17.1"
   },
