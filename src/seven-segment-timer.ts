@@ -60,6 +60,7 @@ export class SevenSegmentTimer {
     } else if (this.showTimer) {
       this.cancelTimer();
     }
+    this.stopBlinking();
 
     this.showTimer = true;
     if (color) {
@@ -89,6 +90,7 @@ export class SevenSegmentTimer {
     } else if (this.showTimer) {
       this.cancelTimer();
     }
+    this.stopBlinking();
 
     if (color) {
       const dotColor: RgbColor = Array.isArray(color) ? color[0] : color;
@@ -233,12 +235,9 @@ export class SevenSegmentTimer {
 
   private timerFinished(): void {
     this.showTimer = false;
+    this.dividerDisplay.stopBlinking();
 
-    this.firstNumberDisplay.showNumber(0);
-    this.secondNumberDisplay.showNumber(0);
-    this.firstNumberDisplay.startBlinking();
-    this.dividerDisplay.startBlinking();
-    this.secondNumberDisplay.startBlinking();
+    this.startBlinking(750);
   }
 
   private updateCurrentTime(): void {
