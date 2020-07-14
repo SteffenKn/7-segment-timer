@@ -80,6 +80,7 @@ export class SevenSegmentTimer {
       this.firstNumberDisplay.showNumber(minutes);
       this.secondNumberDisplay.showNumber(seconds);
     }
+    this.ledController.render();
 
     this.updateTimer(hours, minutes, seconds);
   }
