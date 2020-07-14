@@ -36,6 +36,9 @@ export class SevenSegmentTimer {
   private showCurrentTimeInterval: NodeJS.Timeout;
   private timerTimeout: NodeJS.Timeout;
 
+  private isBlinking: boolean;
+  private blinkInterval: NodeJS.Timeout;
+
   constructor() {
     this.ledController = new LedController(amountOfLeds);
 
@@ -269,6 +272,45 @@ export class SevenSegmentTimer {
       updatedMinutes: minutes,
       updatedSeconds: seconds,
     };
+  }
+
+  private startBlinking(intervalInMs?: number, color?: RgbColor | Array<RgbColor>): void {
+    if (color) {
+      const dotColor: RgbColor = Array.isArray(color) ? color[0] : color;
+
+      this.firstNumberDisplay.setColors(color);
+      this.dividerDisplay.setColor(dotColor);
+      this.secondNumberDisplay.setColors(color);
+    }
+
+    const interval: number = intervalInMs ? intervalInMs : 500;
+    this.isBlinking = true;
+
+    let on: boolean = true;
+    this.blinkInterval = setInterval((): void => {
+      if (!this.isBlinking) {
+        return;
+      }
+
+      if (on) {
+        this.firstNumberDisplay.off();
+        this.dividerDisplay.off();
+        this.secondNumberDisplay.off();
+      } else {
+        this.firstNumberDisplay.on();
+        this.dividerDisplay.on();
+        this.secondNumberDisplay.on();
+      }
+
+      this.ledController.render();
+      on = !on;
+    }, interval);
+  }
+
+  public stopBlinking(): void {
+    this.isBlinking = false;
+
+    clearInterval(this.blinkInterval);
   }
 
   private wait(ms: number): Promise<void> {
