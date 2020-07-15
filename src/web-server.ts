@@ -3,7 +3,9 @@ import bodyParser from 'body-parser';
 import express, {Express} from 'express';
 
 import {RgbColor} from '7-segment-display-controller';
+
 import {SevenSegmentTimer} from './seven-segment-timer';
+import {Animations} from './types/index';
 
 export class Webserver {
   private port: number;
@@ -104,6 +106,40 @@ export class Webserver {
         console.log(`7-Segment-Timer: change colors to ${JSON.stringify(colors)}`);
 
         this.sevenSegmentTimer.setMultipleColors(request.body.colors);
+
+        response.status(200).send('success');
+      } catch (error) {
+        response.status(400).send(error.message);
+      }
+    });
+
+    this.server.post('/start-animation', (request: express.Request, response: express.Response): void => {
+      try {
+        const colors: Array<RgbColor> = request.body.colors;
+        const animation: Animations = request.body.animation;
+
+        if (!colors) {
+          response.status(400).send('Please specify colors that should be used for the animation.');
+
+          return;
+        }
+        if (!animation) {
+          response.status(400).send('Please specify the animation that should get displayed.');
+
+          return;
+        }
+
+        this.sevenSegmentTimer.showAnimation(animation, colors);
+
+        response.status(200).send('success');
+      } catch (error) {
+        response.status(400).send(error.message);
+      }
+    });
+
+    this.server.post('/stop-animation', (_: express.Request, response: express.Response): void => {
+      try {
+        this.sevenSegmentTimer.stopAnimation();
 
         response.status(200).send('success');
       } catch (error) {

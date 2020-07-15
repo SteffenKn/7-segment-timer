@@ -1,5 +1,8 @@
 import {LedController, RgbColor} from '7-segment-display-controller';
 
+import {Animations} from './types/Animations';
+
+import {Animator} from './animator';
 import {DividerDisplay} from './divider-display';
 import {NumberDisplay} from './number-display';
 
@@ -30,6 +33,8 @@ export class SevenSegmentTimer {
   private dividerDisplay: DividerDisplay;
   private secondNumberDisplay: NumberDisplay;
 
+  private animator: Animator;
+
   private showCurrentTime: boolean;
   private showTimer: boolean;
 
@@ -52,6 +57,7 @@ export class SevenSegmentTimer {
     this.secondNumberDisplay = new NumberDisplay(this.ledController, ledIndex, segmentsPerDigit, ledsPerSegment, true);
     ledIndex += ledsPerNumber;
 
+    this.animator = new Animator(this.ledController, this.firstNumberDisplay, this.secondNumberDisplay, this.dividerDisplay);
   }
 
   public async startTimer(hours: number, minutes: number, seconds: number, color: RgbColor): Promise<void> {
@@ -159,36 +165,16 @@ export class SevenSegmentTimer {
     this.ledController.render();
   }
 
-  public async showBootAnimation(): Promise<void> {
-    const colors: Array<number> = [0, 0, 0];
-    for (let rgbIndex: number = 0; rgbIndex < 4; rgbIndex++) {
-      for (let colorIndex: number = 0; colorIndex < 255 / 5; colorIndex++) {
-        if (rgbIndex < 3) {
-          if (rgbIndex > 0) {
-            colors[rgbIndex - 1] -= 5;
-          }
+  public showBootAnimation(): Promise<void> {
+    return this.animator.showBootAnimation(amountOfLeds);
+  }
 
-          colors[rgbIndex] += 5;
-        } else {
-          colors[0] += 5;
-          colors[2] -= 5;
-        }
+  public showAnimation(animation: Animations, color: Array<RgbColor>): void {
+    this.animator.showAnimation(animation, color);
+  }
 
-        const color: RgbColor = {
-          red: colors[0],
-          green: colors[1],
-          blue: colors[2],
-        };
-
-        this.ledController.setLeds(0, amountOfLeds, color);
-        await this.ledController.render();
-        await this.wait(50);
-      }
-    }
-
-    await this.wait(2000);
-    this.ledController.clearLeds(0, amountOfLeds);
-    await this.ledController.render();
+  public stopAnimation(): void {
+    this.animator.stopAnimation();
   }
 
   private updateTimer(hours: number, minutes: number, seconds: number): void {
@@ -311,13 +297,5 @@ export class SevenSegmentTimer {
     this.isBlinking = false;
 
     clearInterval(this.blinkInterval);
-  }
-
-  private wait(ms: number): Promise<void> {
-    return new Promise((resolve: Function): void => {
-      setTimeout((): void => {
-        resolve();
-      }, ms);
-    });
   }
 }
