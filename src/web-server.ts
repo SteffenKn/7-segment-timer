@@ -61,9 +61,9 @@ export class Webserver {
     this.server.post(routes.StartTimer, (request: express.Request, response: express.Response): void => {
       try {
         const color: RgbColor = request.body.color;
-        const hours: number = request.body.hours;
-        const minutes: number = request.body.minutes;
-        const seconds: number = request.body.seconds;
+        const hours: number = request.body.time.hours;
+        const minutes: number = request.body.time.minutes;
+        const seconds: number = request.body.time.seconds;
         console.log(`7-Segment-Timer: start timer (${hours}h ${minutes}m ${seconds}s) in ${JSON.stringify(color)}`);
 
         this.sevenSegmentTimer.startTimer(hours, minutes, seconds, color);
