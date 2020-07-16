@@ -2,10 +2,9 @@
 import bodyParser from 'body-parser';
 import express, {Express} from 'express';
 
-import {RgbColor} from '7-segment-display-controller';
+import {Animations, RgbColor, routes} from '7-segment-timer.contracts';
 
 import {SevenSegmentTimer} from './seven-segment-timer';
-import {Animations} from './types/index';
 
 export class Webserver {
   private port: number;
@@ -38,7 +37,7 @@ export class Webserver {
   }
 
   private registerRoutes(): void {
-    this.server.post('/off', (_: express.Request, response: express.Response): void => {
+    this.server.post(routes.Off, (_: express.Request, response: express.Response): void => {
       console.log(`7-Segment-Timer: off`);
 
       this.sevenSegmentTimer.off();
@@ -46,7 +45,7 @@ export class Webserver {
       response.status(200).send('success');
     });
 
-    this.server.post('/show-current-time', (request: express.Request, response: express.Response): void => {
+    this.server.post(routes.ShowCurrentTime, (request: express.Request, response: express.Response): void => {
       try {
         const color: RgbColor = request.body.color;
         console.log(`7-Segment-Timer: show current time in ${JSON.stringify(color)}`);
@@ -59,7 +58,7 @@ export class Webserver {
       }
     });
 
-    this.server.post('/start-timer', (request: express.Request, response: express.Response): void => {
+    this.server.post(routes.StartTimer, (request: express.Request, response: express.Response): void => {
       try {
         const color: RgbColor = request.body.color;
         const hours: number = request.body.hours;
@@ -75,7 +74,7 @@ export class Webserver {
       }
     });
 
-    this.server.post('/cancel-timer', (_: express.Request, response: express.Response): void => {
+    this.server.post(routes.CancelTimer, (_: express.Request, response: express.Response): void => {
       try {
         console.log(`7-Segment-Timer: cancel timer`);
 
@@ -87,7 +86,7 @@ export class Webserver {
       }
     });
 
-    this.server.post('/change-color', (request: express.Request, response: express.Response): void => {
+    this.server.post(routes.ChangeColor, (request: express.Request, response: express.Response): void => {
       try {
         const color: RgbColor = request.body.color;
         console.log(`7-Segment-Timer: change color to ${JSON.stringify(color)}`);
@@ -100,7 +99,7 @@ export class Webserver {
       }
     });
 
-    this.server.post('/change-multiple-colors', (request: express.Request, response: express.Response): void => {
+    this.server.post(routes.ChangeMultipleColors, (request: express.Request, response: express.Response): void => {
       try {
         const colors: Array<RgbColor> = request.body.colors;
         console.log(`7-Segment-Timer: change colors to ${JSON.stringify(colors)}`);
@@ -113,7 +112,7 @@ export class Webserver {
       }
     });
 
-    this.server.post('/start-animation', (request: express.Request, response: express.Response): void => {
+    this.server.post(routes.StartAnimation, (request: express.Request, response: express.Response): void => {
       try {
         const colors: Array<RgbColor> = request.body.colors;
         const animation: Animations = request.body.animation;
@@ -137,7 +136,7 @@ export class Webserver {
       }
     });
 
-    this.server.post('/stop-animation', (_: express.Request, response: express.Response): void => {
+    this.server.post(routes.StopAnimation, (_: express.Request, response: express.Response): void => {
       try {
         this.sevenSegmentTimer.stopAnimation();
 

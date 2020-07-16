@@ -1,6 +1,6 @@
 import {LedController, RgbColor} from '7-segment-display-controller';
 
-import {Animations} from './types/Animations';
+import {Animations} from '7-segment-timer.contracts';
 
 import {DividerDisplay} from './divider-display';
 import {NumberDisplay} from './number-display';
