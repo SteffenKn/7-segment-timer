@@ -137,6 +137,7 @@ export class SevenSegmentTimer {
 
   public cancelTimer(): void {
     this.showTimer = false;
+    this.dividerDisplay.stopBlinking();
 
     clearTimeout(this.timerTimeout);
   }
